@@ -1,5 +1,5 @@
 7702f203b58979ebbc31bfaeb44f219c *COPYING
-cfaea6d2aec4a0485415d57ebb2727d0 *DESCRIPTION
+3b8e480784515d6c54d580781d2d9e8a *DESCRIPTION
 d3b0e872d42c71b4be19a8337865628e *NAMESPACE
 cdd453d47738df414ef8d1b8a54bc0f8 *R/RcppExports.R
 efe2376ccd78c7fef829ff3b9599786e *R/causal_forest-scores.R
@@ -37,5 +37,5 @@ f17bc8b93b97570e903f94d607b50b3f *man/print.multi_causal_forest.Rd
 8d5ec98e59bc8493873c4f281ef0e65e *tests/testthat/data_clf_Y.csv
 e36bd89d9071b223ce5aaabe60fc6652 *tests/testthat/data_clf_exact.csv
 e0e731ed311a200af8a92355bd59d52d *tests/testthat/test_multi_causal_forest.R
-adeeb9f51e43e9ec910e3bc8ab3299ec *tests/testthat/test_policy_tree.R
+b429cb0d14b3d1a615fe77c13ce0a6c6 *tests/testthat/test_policy_tree.R
 1bdf4389448c157981e4f3b880cad93d *tests/testthat/test_scores.R
