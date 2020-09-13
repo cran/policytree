@@ -1,4 +1,4 @@
-7797f78b3252bfa244ed14fdd90ec7f4 *DESCRIPTION
+871d03c3c6f9f0fdd87c7e57d3a272b8 *DESCRIPTION
 d3b0e872d42c71b4be19a8337865628e *NAMESPACE
 c41f584bc648cedcbc21fa931d3da395 *R/RcppExports.R
 efe2376ccd78c7fef829ff3b9599786e *R/causal_forest-scores.R
@@ -28,7 +28,7 @@ f17bc8b93b97570e903f94d607b50b3f *man/print.multi_causal_forest.Rd
 59b32ba2b222d7b73f82c7d3ca0030b3 *man/print.policy_tree.Rd
 6832ca2b9ba11ae1f20fa94b3944ccbe *src/Makevars
 84a011fdec66c06012417707d03c5a8e *src/RcppExports.cpp
-ef2d482c80a794f0a1fa240168cf25cf *src/Rcppbindings.cpp
+aabc5ef45b307cf61828d8852ee3a481 *src/Rcppbindings.cpp
 a048b11a04ec447f00dbfcbc143d773b *src/tree_search.cpp
 06f622e3cf939024493e3228a78201c5 *src/tree_search.h
 520b65507f2d715e8be4e653852c0dc7 *tests/testthat.R
