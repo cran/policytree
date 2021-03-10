@@ -19,8 +19,12 @@
 #' @param depth The depth of the fitted tree. Default is 2.
 #' @param split.step An optional approximation parameter (integer above zero), the number of possible splits
 #'  to consider when performing tree search. split.step = 1 (default) considers every possible split, split.step = 10
-#'  considers splitting at every 10'th distinct value and will yield a substantial speedup for densely packed
-#'  continuous data.
+#'  considers splitting at every 10'th sample and may yield a substantial speedup for dense features.
+#'  Manually rounding or re-encoding continuous covariates with very high cardinality in a
+#'  problem specific manner allows for finer-grained control of the accuracy/runtime tradeoff and may in some cases
+#'  be the preferred approach over this option.
+#' @param min.node.size An integer indicating the smallest terminal node size permitted. Default is 1.
+#'
 #'
 #' @return A policy_tree object.
 #'
@@ -52,10 +56,20 @@
 #' plot(X[, 1], X[, 2], col = predicted)
 #' legend("topright", c("control", "treat"), col = c(1, 2), pch = 19)
 #' abline(0, -1, lty = 2)
+#'
+#' # Predict the leaf assigned to each sample.
+#' node.id <- predict(tree, X, type = "node.id")
+#' # Can be reshaped to a list of samples per leaf node with `split`.
+#' samples.per.leaf <- split(1:n, node.id)
+#'
+#' # The value of all arms (along with SEs) by each leaf node.
+#' values <- aggregate(dr.scores, by = list(leaf.node = node.id),
+#'                     FUN = function(x) c(mean = mean(x), se = sd(x) / sqrt(length(x))))
+#' print(values, digits = 2)
 #' }
 #' @export
 #' @importFrom utils type.convert
-policy_tree <- function(X, Gamma, depth = 2, split.step = 1) {
+policy_tree <- function(X, Gamma, depth = 2, split.step = 1, min.node.size = 1) {
   n.features <- ncol(X)
   n.actions <- ncol(Gamma)
   n.obs <- nrow(X)
@@ -83,6 +97,12 @@ policy_tree <- function(X, Gamma, depth = 2, split.step = 1) {
   if (n.obs != nrow(Gamma)) {
     stop("X and Gamma does not have the same number of rows")
   }
+  if (as.integer(split.step) != split.step || split.step < 1) {
+    stop("`split.step` should be an integer greater than or equal to 1.")
+  }
+  if (as.integer(min.node.size) != min.node.size || min.node.size < 1) {
+    stop("min.node.size should be an integer greater than or equal to 1.")
+  }
 
   action.names <- colnames(Gamma)
   if (is.null(action.names)) {
@@ -94,7 +114,7 @@ policy_tree <- function(X, Gamma, depth = 2, split.step = 1) {
     columns <- make.names(1:ncol(X))
   }
 
-  result <- tree_search_rcpp(as.matrix(X), as.matrix(Gamma), depth, split.step)
+  result <- tree_search_rcpp(as.matrix(X), as.matrix(Gamma), depth, split.step, min.node.size)
   tree <- list(nodes = result[[1]])
 
   tree[["_tree_array"]] <- result[[2]]
@@ -113,10 +133,13 @@ policy_tree <- function(X, Gamma, depth = 2, split.step = 1) {
 #' Predict values based on fitted policy_tree object.
 #' @param object policy_tree object
 #' @param newdata A data frame with features
+#' @param type The type of prediction required, "action.id" is the action id and
+#'  "node.id" is the integer id of the leaf node the sample falls into. Default is "action.id".
 #' @param ... Additional arguments (currently ignored).
 #'
-#' @return A vector of predictions. Each element is an integer from 1 to d where d is
-#'  the number of columns in the reward matrix.
+#' @return A vector of predictions. For type = "action.id" each element is an integer from 1 to d where d is
+#'  the number of columns in the reward matrix. For type = "node.id" each element is an integer corresponding
+#'  to the node the sample falls into (level-ordered).
 #' @export
 #'
 #' @method predict policy_tree
@@ -142,8 +165,19 @@ policy_tree <- function(X, Gamma, depth = 2, split.step = 1) {
 #' plot(X[, 1], X[, 2], col = predicted)
 #' legend("topright", c("control", "treat"), col = c(1, 2), pch = 19)
 #' abline(0, -1, lty = 2)
+#'
+#' # Predict the leaf assigned to each sample.
+#' node.id <- predict(tree, X, type = "node.id")
+#' # Can be reshaped to a list of samples per leaf node with `split`.
+#' samples.per.leaf <- split(1:n, node.id)
+#'
+#' # The value of all arms (along with SEs) by each leaf node.
+#' values <- aggregate(dr.scores, by = list(leaf.node = node.id),
+#'                     FUN = function(x) c(mean = mean(x), se = sd(x) / sqrt(length(x))))
+#' print(values, digits = 2)
 #' }
-predict.policy_tree <- function(object, newdata, ...) {
+predict.policy_tree <- function(object, newdata, type = c("action.id", "node.id"), ...) {
+  type <- match.arg(type)
   valid.classes <- c("matrix", "data.frame")
   if (!inherits(newdata, valid.classes)) {
     stop(paste("Currently the only supported data input types are:",
@@ -161,5 +195,12 @@ predict.policy_tree <- function(object, newdata, ...) {
     stop("This tree was trained with ", tree$n.features, " variables. Provided: ", ncol(newdata))
   }
 
-  tree_search_rcpp_predict(tree[["_tree_array"]], as.matrix(newdata))
+  ret <- tree_search_rcpp_predict(tree[["_tree_array"]], as.matrix(newdata))
+
+  if (type == "action.id") {
+    return (ret[, 1])
+  } else {
+    return (ret[, 2] + 1) # + 1 for R-index.
+  }
+
 }

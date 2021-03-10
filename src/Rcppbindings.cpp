@@ -27,6 +27,7 @@
   * @param depth The tree depth (0-indexed). An integer greater than or equal to zero.
   * @param split_step The number of possible splits to consider when performing tree search.
   * (an integer greater than or equal to one.)
+  * @param min_node_size An integer indicating the smallest terminal node size permitted.
   * @return The best tree stored in an adjacency list (same format as `grf`).
   *
   * The returned list's first entry:
@@ -45,13 +46,14 @@
 Rcpp::List tree_search_rcpp(const Rcpp::NumericMatrix& X,
                             const Rcpp::NumericMatrix& Y,
                             int depth,
-                            int split_step) {
+                            int split_step,
+                            int min_node_size) {
   size_t num_rows = X.rows();
   size_t num_cols_x = X.cols();
   size_t num_cols_y = Y.cols();
   const Data* data = new Data(X.begin(), Y.begin(), num_rows, num_cols_x, num_cols_y);
 
-  std::unique_ptr<Node> root = tree_search(depth, split_step, data);
+  std::unique_ptr<Node> root = tree_search(depth, split_step, min_node_size, data);
 
   // We store the tree as the same list data structure (`nodes`) as GRF for seamless integration with
   // the plot and print methods. We also store the tree as an array (`tree_array`) for faster lookups.
@@ -100,7 +102,7 @@ Rcpp::List tree_search_rcpp(const Rcpp::NumericMatrix& X,
 }
 
 /**
-  * Return the action index for query samples.
+  * Return a matrix with (action index, node id) for query samples.
   *
   * @param tree_array The tree.
   * @param X The query samples.
@@ -108,17 +110,18 @@ Rcpp::List tree_search_rcpp(const Rcpp::NumericMatrix& X,
   *
   */
 // [[Rcpp::export]]
-Rcpp::NumericVector tree_search_rcpp_predict(const Rcpp::NumericMatrix& tree_array,
+Rcpp::NumericMatrix tree_search_rcpp_predict(const Rcpp::NumericMatrix& tree_array,
                                              const Rcpp::NumericMatrix& X) {
   size_t num_samples = X.rows();
-  Rcpp::NumericVector result(num_samples);
+  Rcpp::NumericMatrix result(num_samples, 2);
   for (size_t sample = 0; sample < num_samples; sample++) {
     size_t node = 0;
     while (true) {
       bool is_leaf = tree_array(node, 0) == -1;
       if (is_leaf) {
         size_t action = tree_array(node, 1);
-        result(sample) = action;
+        result(sample, 0) = action;
+        result(sample, 1) = node;
         break;
       }
       size_t split_var = tree_array(node, 0) - 1; // Offset by 1 for C++ indexing

@@ -4,7 +4,7 @@
 \alias{policy_tree}
 \title{Fit a policy with exact tree search}
 \usage{
-policy_tree(X, Gamma, depth = 2, split.step = 1)
+policy_tree(X, Gamma, depth = 2, split.step = 1, min.node.size = 1)
 }
 \arguments{
 \item{X}{The covariates used. Dimension \eqn{Np} where \eqn{p} is the number of features.}
@@ -15,8 +15,12 @@ policy_tree(X, Gamma, depth = 2, split.step = 1)
 
 \item{split.step}{An optional approximation parameter (integer above zero), the number of possible splits
 to consider when performing tree search. split.step = 1 (default) considers every possible split, split.step = 10
-considers splitting at every 10'th distinct value and will yield a substantial speedup for densely packed
-continuous data.}
+considers splitting at every 10'th sample and may yield a substantial speedup for dense features.
+Manually rounding or re-encoding continuous covariates with very high cardinality in a
+problem specific manner allows for finer-grained control of the accuracy/runtime tradeoff and may in some cases
+be the preferred approach over this option.}
+
+\item{min.node.size}{An integer indicating the smallest terminal node size permitted. Default is 1.}
 }
 \value{
 A policy_tree object.
@@ -59,6 +63,16 @@ predicted <- predict(tree, X)
 plot(X[, 1], X[, 2], col = predicted)
 legend("topright", c("control", "treat"), col = c(1, 2), pch = 19)
 abline(0, -1, lty = 2)
+
+# Predict the leaf assigned to each sample.
+node.id <- predict(tree, X, type = "node.id")
+# Can be reshaped to a list of samples per leaf node with `split`.
+samples.per.leaf <- split(1:n, node.id)
+
+# The value of all arms (along with SEs) by each leaf node.
+values <- aggregate(dr.scores, by = list(leaf.node = node.id),
+                    FUN = function(x) c(mean = mean(x), se = sd(x) / sqrt(length(x))))
+print(values, digits = 2)
 }
 }
 \references{
