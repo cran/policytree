@@ -1,4 +1,4 @@
-5012be0cc7407fdf9755e3ba61e5c765 *DESCRIPTION
+67a7a431af8d2cc975696df6516e44d8 *DESCRIPTION
 55ea39b3baf5a3212edeb60190a1c8ca *NAMESPACE
 044429b2602a6700095acc10c839b5ae *R/RcppExports.R
 efe2376ccd78c7fef829ff3b9599786e *R/causal_forest-scores.R
@@ -29,4 +29,4 @@ f7e5ac828997dd5d053b5564bdd833c4 *src/Rcppbindings.cpp
 b63efc8d2c8dc47b7bf6dbcf52e20c49 *src/tree_search.cpp
 bf15d45f02b05486808f128a8a4d5dfd *src/tree_search.h
 520b65507f2d715e8be4e653852c0dc7 *tests/testthat.R
-5c11354491690f773abdade8e936a7cf *tests/testthat/test_cran_smoke_test.R
+d02ad5d79916ea427b6bd55d2f814374 *tests/testthat/test_cran_smoke_test.R
