@@ -1,7 +1,7 @@
 Package: policytree
 Title: Policy Learning via Doubly Robust Empirical Welfare Maximization
         over Trees
-Version: 1.1.1
+Version: 1.2.0
 Authors@R: c(
     person("Erik", "Sverdrup", role = c("aut", "cre"), email = "erikcs@stanford.edu"),
     person("Ayush", "Kanodia", role = "aut"),
@@ -10,20 +10,20 @@ Authors@R: c(
     person("Stefan", "Wager", role = "aut")
     )
 Description: Learn optimal policies via doubly robust empirical
- welfare maximization over trees. This package implements the multi-action doubly
- robust approach of Zhou, Athey and Wager (2018) <arXiv:1810.04778> in the case where
- we want to learn policies that belong to the class of depth k decision trees.
+ welfare maximization over trees. Given doubly robust reward estimates, this package
+ finds a rule-based treatment prescription policy, where the policy takes the form of
+ a shallow decision tree that is globally (or close to) optimal.
 Depends: R (>= 3.5.0)
 License: GPL-3
 Encoding: UTF-8
-Suggests: testthat (>= 2.1.0), DiagrammeR
+Suggests: testthat (>= 3.0.4), DiagrammeR
 RoxygenNote: 7.1.1
 LinkingTo: Rcpp, BH
 Imports: Rcpp, grf (>= 2.0.0)
 URL: https://github.com/grf-labs/policytree
 BugReports: https://github.com/grf-labs/policytree/issues
 NeedsCompilation: yes
-Packaged: 2021-07-07 00:43:34 UTC; erik
+Packaged: 2022-03-18 02:45:16 UTC; erik
 Author: Erik Sverdrup [aut, cre],
   Ayush Kanodia [aut],
   Zhengyuan Zhou [aut],
@@ -31,4 +31,4 @@ Author: Erik Sverdrup [aut, cre],
   Stefan Wager [aut]
 Maintainer: Erik Sverdrup <erikcs@stanford.edu>
 Repository: CRAN
-Date/Publication: 2021-07-07 04:30:02 UTC
+Date/Publication: 2022-03-18 03:40:02 UTC

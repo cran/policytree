@@ -27,6 +27,7 @@
 #'  problem specific manner allows for finer-grained control of the accuracy/runtime tradeoff and may in some cases
 #'  be the preferred approach.
 #' @param min.node.size An integer indicating the smallest terminal node size permitted. Default is 1.
+#' @param verbose Give verbose output. Default is TRUE.
 #'
 #' @return A policy_tree object.
 #'
@@ -36,14 +37,14 @@
 #'  "policytree: Policy learning via doubly robust empirical welfare maximization over trees."
 #'   Journal of Open Source Software 5, no. 50 (2020): 2232.
 #' @references Zhou, Zhengyuan, Susan Athey, and Stefan Wager. "Offline multi-action policy learning:
-#'  Generalization and optimization." arXiv preprint arXiv:1810.04778 (2018).
+#'  Generalization and optimization." Operations Research, forthcoming.
 #'
 #' @examples
 #' \donttest{
 #' # Fit a depth two tree on doubly robust treatment effect estimates from a causal forest.
 #' n <- 10000
 #' p <- 10
-#' # Rounding down continuous covariates decreases runtime.
+#' # Discretizing continuous covariates decreases runtime.
 #' X <- round(matrix(rnorm(n * p), n, p), 2)
 #' colnames(X) <- make.names(1:p)
 #' W <- rbinom(n, 1, 1 / (1 + exp(X[, 3])))
@@ -86,8 +87,9 @@
 #' top.5 <- order(var.imp, decreasing = TRUE)[1:5]
 #' tree.top5 <- policy_tree(X[, top.5], dr.scores, 2, split.step = 50)
 #' }
+#' @seealso \code{\link{hybrid_policy_tree}} for building deeper trees.
 #' @export
-policy_tree <- function(X, Gamma, depth = 2, split.step = 1, min.node.size = 1) {
+policy_tree <- function(X, Gamma, depth = 2, split.step = 1, min.node.size = 1, verbose = TRUE) {
   n.features <- ncol(X)
   n.actions <- ncol(Gamma)
   n.obs <- nrow(X)
@@ -97,10 +99,10 @@ policy_tree <- function(X, Gamma, depth = 2, split.step = 1, min.node.size = 1) 
     stop(paste("Currently the only supported data input types are:",
                "`matrix`, `data.frame`"))
   }
-  if (!is.numeric(as.matrix(X))) {
+  if (!is.numeric(as.matrix(X)) || any(dim(X) == 0)) {
     stop("The feature matrix X must be numeric")
   }
-  if (!is.numeric(as.matrix(Gamma))) {
+  if (!is.numeric(as.matrix(Gamma)) || any(dim(Gamma) == 0)) {
     stop("The reward matrix Gamma must be numeric")
   }
   if (anyNA(X)) {
@@ -120,6 +122,35 @@ policy_tree <- function(X, Gamma, depth = 2, split.step = 1, min.node.size = 1) 
   }
   if (as.integer(min.node.size) != min.node.size || min.node.size < 1) {
     stop("min.node.size should be an integer greater than or equal to 1.")
+  }
+
+  if (verbose) {
+    cardinality <- apply(X, 2, function(x) length(unique(x)))
+    if (split.step == 1 && any(cardinality > 20000)) {
+      warning(paste0(
+        "The cardinality of some covariates exceeds 20000 distinct values. ",
+        "Consider using the optional parameter `split.step` to speed up computations, or ",
+        "discretize/relabel continuous features for finer grained control ",
+        "(the runtime of exact tree search scales with the number of distinct features, ",
+        "see the documentation for details.)"
+      ), immediate. = TRUE)
+    }
+    if (ncol(X) > 50) {
+      warning(paste0(
+        "The number of covariates exceeds 50. Consider reducing the dimensionality before ",
+        "running policy_tree, by for example using only the Xj's with the ",
+        "highest variable importance (`grf::variable_importance` - the runtime of exact tree ",
+        "search scales with ncol(X)^depth, see the documentation for details)."
+      ), immediate. = TRUE)
+    }
+    if (depth > 2 && nrow(X) > 5000) {
+      warning(paste0(
+        "A depth 3 or deeper policy_tree is only feasible for 'small' n and p. ",
+        "To fit deeper trees, consider using the hybrid greedy approach available in the function ",
+        "`hybrid_policy_tree`. Note that this still requires an (n, p) configuration ",
+        "which is feasible for a depth k=2 policy_tree, see the documentation for details."
+      ), immediate. = TRUE)
+    }
   }
 
   action.names <- colnames(Gamma)
@@ -167,7 +198,7 @@ policy_tree <- function(X, Gamma, depth = 2, split.step = 1, min.node.size = 1) 
 #' # Fit a depth two tree on doubly robust treatment effect estimates from a causal forest.
 #' n <- 10000
 #' p <- 10
-#' # Rounding down continuous covariates decreases runtime.
+#' # Discretizing continuous covariates decreases runtime.
 #' X <- round(matrix(rnorm(n * p), n, p), 2)
 #' colnames(X) <- make.names(1:p)
 #' W <- rbinom(n, 1, 1 / (1 + exp(X[, 3])))
