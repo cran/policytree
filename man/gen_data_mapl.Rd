@@ -18,12 +18,12 @@ A list with realized action \eqn{a_i}, region \eqn{r_i},
 conditional mean \eqn{\mu}, outcome \eqn{Y} and covariates \eqn{X}
 }
 \description{
-The DGP from section 6.4.1 in Zhou, Athey, and Wager (2018):
+The DGP from section 6.4.1 in Zhou, Athey, and Wager (2023):
 There are \eqn{d=3} actions \eqn{(a_0,a_1,a_2)} which depend
 on 3 regions the covariates \eqn{X \sim U[0,1]^p} reside in. Observed outcomes:
 \eqn{Y \sim N(\mu_{a_i}(X_i), 4)}
 }
 \references{
 Zhou, Zhengyuan, Susan Athey, and Stefan Wager. "Offline multi-action policy learning:
-Generalization and optimization." Operations Research, forthcoming.
+Generalization and optimization." Operations Research 71.1 (2023).
 }
