@@ -1,4 +1,5 @@
-237c02ce83f670802ad29fea05d17d09 *DESCRIPTION
+9419d981de819f31227c9bfd65996655 *DESCRIPTION
+d350af7b08308140ac2968cebe3db405 *LICENSE
 ca733a3d4b26f3799ee62869834d2424 *NAMESPACE
 044429b2602a6700095acc10c839b5ae *R/RcppExports.R
 fd82952b32a046861e78fae86427d55c *R/causal_forest-scores.R
@@ -30,8 +31,8 @@ dd0c8d2ad33f2aac3df431b413d62e5d *man/multi_causal_forest.Rd
 e291e5b833e420c411f6c39b72c8e189 *man/predict_test_tree.Rd
 59b32ba2b222d7b73f82c7d3ca0030b3 *man/print.policy_tree.Rd
 5bdf2fc0894184468bdf2dfa5e6c8344 *src/RcppExports.cpp
-f7e5ac828997dd5d053b5564bdd833c4 *src/Rcppbindings.cpp
-b63efc8d2c8dc47b7bf6dbcf52e20c49 *src/tree_search.cpp
-bf15d45f02b05486808f128a8a4d5dfd *src/tree_search.h
+c31f39769e8ec810144563da8c2acca4 *src/Rcppbindings.cpp
+95f61c7d2e34f7e9b320cb0c3231d3d7 *src/tree_search.cpp
+8ddd30420fa368b806eab7dfbc7c9fa5 *src/tree_search.h
 520b65507f2d715e8be4e653852c0dc7 *tests/testthat.R
 d02ad5d79916ea427b6bd55d2f814374 *tests/testthat/test_cran_smoke_test.R
