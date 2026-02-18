@@ -1,7 +1,7 @@
-9419d981de819f31227c9bfd65996655 *DESCRIPTION
+c1fe7955651cdc72e38a3411ff91c67a *DESCRIPTION
 d350af7b08308140ac2968cebe3db405 *LICENSE
 ca733a3d4b26f3799ee62869834d2424 *NAMESPACE
-044429b2602a6700095acc10c839b5ae *R/RcppExports.R
+a339fb1b49b1d516e174270ec9fc2483 *R/RcppExports.R
 fd82952b32a046861e78fae86427d55c *R/causal_forest-scores.R
 92b5876364f82908f89ecd37071aaec9 *R/causal_survival_forest-scores.R
 59529c836a643a834f461cfa2b48ec1b *R/data.R
@@ -11,7 +11,7 @@ fd82952b32a046861e78fae86427d55c *R/causal_forest-scores.R
 740908d20c9be9e897c135fd2b76f5b9 *R/multi_arm_causal_forest-scores.R
 125fafa92c5b9525edfe73fcb914d341 *R/policy_tree-plot.R
 9710e3fd25a5e6a0be83ab52f5482570 *R/policy_tree-print.R
-00e497add65fe2d67a4680bd6898cc8a *R/policy_tree.R
+1b7c8b997abd9fb00f82177ca4a2221b *R/policy_tree.R
 527acb2b015126b3590ffd5eba13cc04 *R/policytree-package.R
 d88994010c29c3d34aba46e40eea7c11 *R/scores.R
 dc63abace3b1374ccface6fcad9d05b3 *R/utils.R
@@ -30,9 +30,9 @@ dd0c8d2ad33f2aac3df431b413d62e5d *man/multi_causal_forest.Rd
 49b06619206d1faffceecf40a258b10e *man/predict.policy_tree.Rd
 e291e5b833e420c411f6c39b72c8e189 *man/predict_test_tree.Rd
 59b32ba2b222d7b73f82c7d3ca0030b3 *man/print.policy_tree.Rd
-5bdf2fc0894184468bdf2dfa5e6c8344 *src/RcppExports.cpp
-c31f39769e8ec810144563da8c2acca4 *src/Rcppbindings.cpp
-95f61c7d2e34f7e9b320cb0c3231d3d7 *src/tree_search.cpp
-8ddd30420fa368b806eab7dfbc7c9fa5 *src/tree_search.h
+0ab0929f5ff98dc8d778dc700139cc17 *src/RcppExports.cpp
+ed54b00688aaf3fe3213918ac3b657ea *src/Rcppbindings.cpp
+4930052a185ff74a9ddd8435f5e4b8a0 *src/tree_search.cpp
+bcf635857555aea86ccfd7a20f590cfd *src/tree_search.h
 520b65507f2d715e8be4e653852c0dc7 *tests/testthat.R
 d02ad5d79916ea427b6bd55d2f814374 *tests/testthat/test_cran_smoke_test.R

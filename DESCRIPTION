@@ -1,7 +1,7 @@
 Package: policytree
 Title: Policy Learning via Doubly Robust Empirical Welfare Maximization
         over Trees
-Version: 1.2.3
+Version: 1.2.4
 Authors@R: c(
     person("Erik", "Sverdrup", role = c("aut", "cre"), email = "erik.sverdrup@monash.edu"),
     person("Ayush", "Kanodia", role = "aut"),
@@ -23,7 +23,7 @@ Imports: Rcpp, grf (>= 2.0.0)
 URL: https://github.com/grf-labs/policytree
 BugReports: https://github.com/grf-labs/policytree/issues
 NeedsCompilation: yes
-Packaged: 2024-06-13 03:16:56 UTC; erikcs
+Packaged: 2026-02-18 06:27:58 UTC; erikcs
 Author: Erik Sverdrup [aut, cre],
   Ayush Kanodia [aut],
   Zhengyuan Zhou [aut],
@@ -31,4 +31,4 @@ Author: Erik Sverdrup [aut, cre],
   Stefan Wager [aut]
 Maintainer: Erik Sverdrup <erik.sverdrup@monash.edu>
 Repository: CRAN
-Date/Publication: 2024-06-13 22:00:02 UTC
+Date/Publication: 2026-02-18 07:10:02 UTC
